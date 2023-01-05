@@ -22,6 +22,7 @@
 ### 01 Define an empty tibble for recording the status of scheduled jobs ----
 
 scheduled_workbench_jobs <- tibble::tibble(
+  job_id = character(0),
   job_name = character(0),
   schedule_name = character(0),
   due = as.POSIXct(character())
@@ -49,7 +50,8 @@ schedule_workbench_job <- function(job_name,       # Name to give the Workbench 
   # 'scheduled_workbench_jobs'
   scheduled_workbench_jobs <<- dplyr::bind_rows(
     scheduled_workbench_jobs,
-    tibble::tibble(job_name = job_name,
+    tibble::tibble(job_id = "",
+                   job_name = job_name,
                    schedule_name = schedule_name,
                    due = due)
   )
@@ -68,6 +70,20 @@ schedule_workbench_job <- function(job_name,       # Name to give the Workbench 
                                        n_cpu = n_cpu,
                                        n_ram = n_ram)
 
+        # Add the job_id to workbench job to the tibble
+        # 'scheduled_workbench_jobs'
+        a <- job_id
+        b <- job_name
+        c <- schedule_name
+        d <- due
+        scheduled_workbench_jobs <<- within(
+          scheduled_workbench_jobs,
+          job_id[job_name      == b &
+                 schedule_name == c &
+                 due           == d] <- a
+        )
+        rm(list = letters[1:4])
+        
         # Recursively call this function every 'rpt' seconds
         if(!is.null(rpt)) {
           
@@ -78,7 +94,8 @@ schedule_workbench_job <- function(job_name,       # Name to give the Workbench 
           # 'scheduled_workbench_jobs'
           scheduled_workbench_jobs <<- dplyr::bind_rows(
             scheduled_workbench_jobs,
-            tibble::tibble(job_name = job_name,
+            tibble::tibble(job_id = "",
+                           job_name = job_name,
                            schedule_name = schedule_name,
                            due = due)
           )
@@ -100,10 +117,10 @@ schedule_workbench_job <- function(job_name,       # Name to give the Workbench 
 ####
 
 schedule_workbench_job(
-  job_name = "task1",
-  schedule_name = "task1_schedule",
-  due = lubridate::ymd_hms("2023-01-05 14:02:00"),
-  rpt = 120,
+  job_name = "task2",
+  schedule_name = "task2_schedule",
+  due = lubridate::ymd_hms("2023-01-05 15:03:00"),
+  rpt = 60,
   project_path = here::here(),
   script = "code/test_launch_workbench_job_script.R",
   n_cpu = 0.25,
