@@ -18,11 +18,12 @@
 
 # A function to programmatically launch a workbench job on the Kubernetes
 # cluster
-launch_workbench_job <- function(project,           # Path to project / working directory
-                                 script,            # Relative path to R script to execute
-                                 ncpus = NULL,      # Number of CPUs to request
-                                 mem = NULL,        # Amount of memory (MB) to request
-                                 job_name = NULL) { # Name to give the Workbench Job
+launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench Job
+                                 project_path,    # Path to project / working directory
+                                 script,          # Relative path to R script to execute
+                                 n_cpu = NULL,    # Number of CPUs to request
+                                 n_ram = NULL) {  # Amount of memory (MB) to request
+
   if(!rstudioapi::launcherAvailable()) {
     stop("Workbench launcher is not available.")
   } else {
@@ -31,7 +32,7 @@ launch_workbench_job <- function(project,           # Path to project / working 
     launcher_info <- rstudioapi::launcherGetInfo()
     
     # Define the project's path (i.e. the working directory)
-    project_path <- path.expand(project)
+    project_path <- path.expand(project_path)
     if(!dir.exists(project_path)) {
       stop(paste0("The directory '", project_path, "' does not exist."))
     }
@@ -57,22 +58,22 @@ launch_workbench_job <- function(project,           # Path to project / working 
       subset(cluster_resource_limits, type == "cpuCount")[, "maxValue"]
     )
     
-    if(!is.null(ncpus)) {
-      if(ncpus > cpu_count_max_value) {
-        stop(paste0("'cpu_count' requested (", ncpus, ") is greater than ",
+    if(!is.null(n_cpu)) {
+      if(n_cpu > cpu_count_max_value) {
+        stop(paste0("'cpu_count' requested (", n_cpu, ") is greater than ",
                     "maximum permitted (", cpu_count_max_value, ")."))
       }
     }
     
     # Stop if amount of memory requested is greater than maximum permitted
-    mem_count_max_value <- as.numeric(
+    ram_count_max_value <- as.numeric(
       subset(cluster_resource_limits, type == "memory")[, "maxValue"]
     )
     
-    if(!is.null(mem)) {
-      if(mem > mem_count_max_value) {
-        stop(paste0("'memory' requested (", mem, ") is greater than ",
-                    "maximum permitted (", mem_count_max_value, ")."))
+    if(!is.null(n_ram)) {
+      if(n_ram > ram_count_max_value) {
+        stop(paste0("'memory' requested (", n_ram, ") is greater than ",
+                    "maximum permitted (", ram_count_max_value, ")."))
       }
     }
     
@@ -81,9 +82,9 @@ launch_workbench_job <- function(project,           # Path to project / working 
       type = "cpuCount",
       value = sprintf(
         ifelse(
-          is.null(ncpus),
+          is.null(n_cpu),
           as.numeric(subset(cluster_resource_limits, type == "cpuCount")[, "defaultValue"]),
-          ncpus
+          n_cpu
         ),
         fmt = "%#.6f"
       )
@@ -93,9 +94,9 @@ launch_workbench_job <- function(project,           # Path to project / working 
       type = "memory",
       value = sprintf(
         ifelse(
-          is.null(mem),
+          is.null(n_ram),
           as.numeric(subset(cluster_resource_limits, type == "memory")[, "defaultValue"]),
-          mem
+          n_ram
         ),
         fmt = "%#.6f"
       )
