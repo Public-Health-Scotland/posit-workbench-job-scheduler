@@ -29,23 +29,38 @@ schedule_workbench_job <- function(project,           # Path to project / workin
                                    schedule_entries,  # List of dates / times when Workbench Job should be launched
                                    schedule_name) {   # A name for the schedule
   
-    
-    
+  # Create a private event loop for the schedule
+  assign(schedule_name, later::create_loop())
+  
+  # Schedule the job to run at each date and time listed in schedule_entries
+  for (dt in schedule_entries){
+    later::later(function() {
+      job_id <- launch_workbench_job(project = project,
+                                     script = script,
+                                     ncpus = ncpus,
+                                     mem = mem,
+                                     job_name = job_name)
+    },
+    delay = as.numeric(difftime(dt, lubridate::as_datetime(Sys.time()), units = "secs")),
+    loop = eval(parse(text = schedule_name)))
   }
+  
+  return(eval(parse(text = schedule_name)))
 }
 
 schedule_entries <- list(
-  lubridate::as_datetime("2022-12-22 15:00"),
-  lubridate::as_datetime("2022-12-22 15:05"),
+  lubridate::ymd_hms("2023-01-04 15:41:00"),
+  lubridate::ymd_hms("2023-01-04 15:42:00")
 )
 
-schedule_workbench_job(project = here::here(),
-                       script = "code/test_launch_workbench_job_script.R",
-                       ncpus = 0.25,
-                       mem = 128,
-                       job_name = "Test Workbench Job",
-                       schedule_entries = schedule_entries,
-                       schedule_name = "Test")
+schedule_handle <- schedule_workbench_job(
+  project = here::here(),
+  script = "code/test_launch_workbench_job_script.R",
+  ncpus = 0.25,
+  mem = 128,
+  job_name = "Test Workbench Job",
+  schedule_entries = schedule_entries,
+  schedule_name = "Test")
 
-
+later::exists_loop(schedule_handle)
 
