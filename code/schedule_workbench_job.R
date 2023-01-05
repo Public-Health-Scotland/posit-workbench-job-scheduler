@@ -112,7 +112,36 @@ schedule_workbench_job <- function(job_name,       # Name to give the Workbench 
   )
 }
 
-
+cancel_schedule <- function(schedule_name){
+  tryCatch(
+    # Try to destroy the event loop that 'schedule_name' points to
+    {
+      later::destroy_loop(schedule_name)
+    },
+    # If an error occurs, handle this
+    error = function(e) {
+      message("Error in cancel_schedule(schedule_name) caught whilst trying to destroy the event loop that 'schedule_name' points to:")
+      print(e)
+      return()
+    }
+  )
+  
+  tryCatch(
+    # If the 'schedule_name' event loop's status is 'destroyed', remove the 'schedule_name'
+    # object from GlobalEnv
+    {
+      if(!later::exists_loop(schedule_name)) {
+        rm(list = as.character(substitute(schedule_name)), envir = .GlobalEnv)
+      }
+    },
+    # If an error occurs, handle this
+    error = function(e) {
+      message("Error in cancel_schedule(schedule_name) caught whilst trying to remove the 'schedule_name' object from GlobalEnv:")
+      print(e)
+      return()
+    }
+  )
+}
 
 ####
 
