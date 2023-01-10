@@ -20,14 +20,7 @@
 #install.packages("dplyr")
 
 
-### 01 Define an empty tibble for recording the status of scheduled jobs ----
 
-scheduled_workbench_jobs <- tibble::tibble(
-  job_id = character(0),
-  job_name = character(0),
-  schedule_name = character(0),
-  due = as.POSIXct(character())
-)
 
 ### 02 schedule_workbench_job()  ----
 
@@ -185,6 +178,21 @@ schedule_workbench_job <- function(job_name,       # Name to give the Workbench 
   # Create a private event loop for the schedule, if it doesn't already exist
   if(!exists(eval(schedule_name))) {
     assign(schedule_name, later::create_loop(), envir = .GlobalEnv)
+  }
+  
+  # Define an empty tibble for recording the status of scheduled jobs, if it
+  # doesn't already exist
+  if(!exists("scheduled_workbench_jobs")){
+    a <- tibble::tibble(
+      job_id = character(0),
+      job_name = character(0),
+      schedule_name = character(0),
+      due = as.POSIXct(character())
+    )
+    
+    assign("scheduled_workbench_jobs", a, envir = .GlobalEnv)
+    
+    rm(a)
   }
   
   # Add the details of the first run of the workbench job to the tibble
