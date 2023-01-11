@@ -14,6 +14,7 @@
 ### 00 Required packages ----
 
 
+
 ### 01 cancel_workbench_job_schedule() ----
 
 cancel_workbench_job_schedule <- function(schedule_name){ # The name of the schedule (event loop) to cancel
@@ -31,10 +32,10 @@ cancel_workbench_job_schedule <- function(schedule_name){ # The name of the sche
         "{.var schedule_name} must be a {.cls {class('character')}} vector of length 1.",
         "x" = paste0("{.var schedule_name} is a {.cls {class(schedule_name)}} vector of length ", length(schedule_name), ".")))
     } else{
-      if(!exists(substitute(schedule_name), envir = .GlobalEnv)){
+      if(!exists(schedule_name, envir = .GlobalEnv)){
         cli::cli_abort(c(
-          "{.var schedule_name} must match the name of an object in the Global Environment.",
-          "x" = paste0("An object with the name '", schedule_name, "' does not exist in the Global Environment.")))
+          "{.var schedule_name} must match the name of an object in the .GlobalEnv.",
+          "x" = paste0("An object with the name '", schedule_name, "' does not exist in the .GlobalEnv.")))
       } else{
         if(class(get(schedule_name, envir = .GlobalEnv)) != class(later::global_loop())){
           cli::cli_abort(c(
@@ -44,39 +45,38 @@ cancel_workbench_job_schedule <- function(schedule_name){ # The name of the sche
       }
     }
   }
-}
   
   ### ---- END Check arguments passed to the function                   ---- ###
   
+  # Destroy the event loop that 'schedule_name' points to
+  later::destroy_loop(get(schedule_name, envir = .GlobalEnv))
   
-  tryCatch(
-    # Try to destroy the event loop that 'schedule_name' points to
-    {
-      later::destroy_loop(schedule_name)
-    },
-    # If an error occurs, handle this
-    error = function(e) {
-      message("Error in cancel_schedule(schedule_name) caught whilst trying to destroy the event loop that 'schedule_name' points to:")
-      print(e)
-      return()
-    }
-  )
+  # If the 'schedule_name' event loop's status is 'destroyed', remove the
+  # 'schedule_name' object from GlobalEnv
+  if(!later::exists_loop(get(schedule_name, envir = .GlobalEnv))) {
+    rm(list = as.character(schedule_name), envir = .GlobalEnv)
+  } else{
+    cli::cli_abort(c(
+      paste0("Unable to remove {.var ", schedule_name, "} from {.code .GlobalEnv}."),
+      "x" = paste0("The event loop {.var ", schedule_name, "} still exists."),
+      "i" = paste0("Ensure that the event loop is destroyed first: {.code later::destroy_loop(", schedule_name, ")}.")))
+  }
   
-  tryCatch(
-    # If the 'schedule_name' event loop's status is 'destroyed', remove the 'schedule_name'
-    # object from GlobalEnv
-    {
-      if(!later::exists_loop(schedule_name)) {
-        rm(list = as.character(substitute(schedule_name)), envir = .GlobalEnv)
-      }
-    },
-    # If an error occurs, handle this
-    error = function(e) {
-      message("Error in cancel_schedule(schedule_name) caught whilst trying to remove the 'schedule_name' object from GlobalEnv:")
-      print(e)
-      return()
-    }
-  )
+  # If 'schedule_name' no longer exists as an object in GlobalEnv, remove all
+  # rows in 'scheduled_workbench_jobs' that refer to 'schedule_name'
+  if(!exists(schedule_name, envir = .GlobalEnv)){
+    suppressWarnings(
+      scheduled_workbench_jobs <<- scheduled_workbench_jobs |>
+        dplyr::filter(!grepl(paste0("^", schedule_name, "$"), schedule_name))
+    )
+  } else{
+    cli::cli_abort(c(
+      paste0("Unable to remove rows from the tibble {.var scheduled_workbench_jobs} referring to the object {.var ", schedule_name, "}."),
+      "x" = paste0("The object {.var ", schedule_name, "} still exists.")))
+  }
+  
+  # Inform the user that the schedule has been successfully cancelled
+  cli::cli_inform(c(
+    "v" = paste0("The schedule '", schedule_name, "' has successully been cancelled.")
+  ))
 }
-
-
