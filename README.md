@@ -38,20 +38,25 @@ launch_workbench_job(
 
 #### Arguments
 
-**job_name**
-  Some text
+##### job_name
 
-**project_path**
-  Some text
+A descriptive name to assign to the Workbench Job.
 
-**script**
-  Some text
+##### project_path
 
-**n_cpu**
-  Some text
+The full file path to the root directory of the project that `script` should be run in e.g. `/path/to/project/`.
 
-**n_ram**
-  Some text
+##### script
+
+A file path to the R script to be run by the Workbench Job, relative to `project path` e.g. `code/script.R`.
+
+##### n_cpu
+
+The number of CPUs to request for the Workbench Job e.g. `1.0`
+
+##### n_ram
+
+The amount of memory (RAM) in MiB to request for the Workbench Job e.g. `4096`
 
 #### Examples
 
