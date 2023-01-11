@@ -14,5 +14,23 @@
 
 `posit-workbench-job-scheduler` is a standalone R project that should be opened in a Posit Workbench session on the Kubernetes cluster.  This session needs to run continuously in the background for Workbench Jobs to be launched on the Kubernetes cluster at the right time, therefore the smaller this session, the better in terms of reducing load on the Kubernetes cluster.  I would highly recommend selecting x CPUs and y memory for this session.
 
+### Starting the scheduler
+
 :memo: _Write a run.R script and documentation for starting the scheduler._
 
+### Scheduling a Workbench Job
+
+#### One-time only at a specific time
+
+
+
+#### At a specific time and at regular intervals thereafter
+
+
+### Cancelling a scheduled Workbench Job
+
+A specific scheduled Workbench Job cannot be cancelled.  Instead, please refer to [cancelling a schedule](#cancelling-a-schedule)
+
+### Cancelling a schedule
+
+The function `cancel_workbench_job_schedule()` cancels a schedule created by the function `schedule_workbench_job()`.
