@@ -40,7 +40,7 @@ launch_workbench_job(
 
 ##### job_name
 
-A descriptive name to assign to the Workbench Job.
+A descriptive name to assign to the Workbench Job.  Default is the filename of `script`.
 
 ##### project_path
 
