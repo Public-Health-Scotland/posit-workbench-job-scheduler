@@ -7,7 +7,7 @@
 # Written/run on: R version 4.1.2 (2021-11-01) -- "Bird Hippie"
 # Platform: x86_64-pc-linux-gnu (64-bit)
 #
-# Functions to programmatically schedule the launch of workbench jobs on the
+# Function to programmatically schedule the launch of workbench jobs on the
 # Kubernetes cluster.
 ################################################################################
 
