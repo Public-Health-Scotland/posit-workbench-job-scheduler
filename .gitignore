@@ -1,0 +1,31 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# 'data' folders #
+data/basefiles/
+data/output/
+data/temp/
+
+# Common text files that may contain data #
+*.[cC][sS][vV]
+*.[tT][xX][tT]
+
+# Excel files #
+*.[xX][lL][sS][xXmMtT]?
+
+# SPSS formats #
+*.[sS][aA][vV]
+*.[zZ][sS][aA][vV]
+
+# R data files #
+*.[rR][dD][aA][tT][aA]
+*.[rR][dD][sS]
+
+# MacOS folder attributes files #
+.DS_Store
+
+renv/library
+renv/.gitignore
+renv/settings.dcf
