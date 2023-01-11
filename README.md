@@ -60,6 +60,16 @@ The amount of memory (RAM) in MiB to request for the Workbench Job e.g. `4096`
 
 #### Examples
 
+```R
+job_id <- launch_workbench_job(
+  job_name = "A name for this job",
+  project_path = here::here(),
+  script = "code/script.R",
+  n_cpu = 0.25,
+  n_ram = 128
+)
+```
+
 ### Scheduling a Workbench Job
 
 The function `schedule_workbench_job()` schedules a Workbench Job to launch on the Kubernetes cluster at a specific time and/or at regular intervals.
