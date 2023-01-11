@@ -52,11 +52,11 @@ A file path to the R script to be run by the Workbench Job, relative to `project
 
 ##### n_cpu
 
-The number of CPUs to request for the Workbench Job e.g. `1.0`
+The number of CPUs to request for the Workbench Job e.g. `1.0`.  Default is the default number of CPUs for a session as defined in the Kubernetes cluster.
 
 ##### n_ram
 
-The amount of memory (RAM) in MiB to request for the Workbench Job e.g. `4096`
+The amount of memory (RAM) in MiB to request for the Workbench Job e.g. `4096`. Default is the default amount of memory for a session as defined in the Kubernetes cluster.
 
 #### Examples
 
