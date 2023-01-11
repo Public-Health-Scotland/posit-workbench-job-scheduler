@@ -19,10 +19,7 @@
 #install.packages("tibble")
 #install.packages("dplyr")
 
-
-
-
-### 02 schedule_workbench_job()  ----
+### 01 schedule_workbench_job()  ----
 
 # A function to programmatically schedule the launch of a workbench job on the
 # Kubernetes cluster
@@ -163,7 +160,6 @@ schedule_workbench_job <- function(job_name,       # Name to give the Workbench 
   
   ### ---- END Check arguments passed to the function                   ---- ###
   
-
   # Calculate the initial delay for the first run
   initial_delay <- as.numeric(difftime(due, lubridate::as_datetime(Sys.time()), units = "secs"))
   
@@ -258,50 +254,3 @@ schedule_workbench_job <- function(job_name,       # Name to give the Workbench 
     loop = eval(parse(text = schedule_name))
   )
 }
-
-cancel_schedule <- function(schedule_name){
-  tryCatch(
-    # Try to destroy the event loop that 'schedule_name' points to
-    {
-      later::destroy_loop(schedule_name)
-    },
-    # If an error occurs, handle this
-    error = function(e) {
-      message("Error in cancel_schedule(schedule_name) caught whilst trying to destroy the event loop that 'schedule_name' points to:")
-      print(e)
-      return()
-    }
-  )
-  
-  tryCatch(
-    # If the 'schedule_name' event loop's status is 'destroyed', remove the 'schedule_name'
-    # object from GlobalEnv
-    {
-      if(!later::exists_loop(schedule_name)) {
-        rm(list = as.character(substitute(schedule_name)), envir = .GlobalEnv)
-      }
-    },
-    # If an error occurs, handle this
-    error = function(e) {
-      message("Error in cancel_schedule(schedule_name) caught whilst trying to remove the 'schedule_name' object from GlobalEnv:")
-      print(e)
-      return()
-    }
-  )
-}
-
-####
-
-schedule_workbench_job(
-  job_name = "job_name_1",
-  schedule_name = "schedule_1",
-  due = lubridate::ymd_hms("2023-01-10 22:00:00"),
-  rpt = as.numeric(lubridate::as.duration("7 days")),
-  project_path = here::here(),
-  script = "code/test_launch_workbench_job_script.R",
-  n_cpu = 0.25,
-  n_ram = 128
-)
-
-
-
