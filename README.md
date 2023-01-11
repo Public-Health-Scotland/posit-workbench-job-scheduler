@@ -18,7 +18,48 @@
 
 :memo: _Write a run.R script and documentation for starting the scheduler._
 
+### Launch a Workbench Job immediately
+
+The function `launch_workbench_job()` immediately launches a Workbench Job on the Kubernetes cluster.
+
+:memo: _Need to write more / better checking of arguments supplied to this function_
+
+#### Usage
+
+```R
+launch_workbench_job(
+  job_name,
+  project_path,
+  script,
+  n_cpu,
+  n_ram
+)
+```
+
+#### Arguments
+
+**job_name**
+  Some text
+
+**project_path**
+  Some text
+
+**script**
+  Some text
+
+**n_cpu**
+  Some text
+
+**n_ram**
+  Some text
+
+#### Examples
+
 ### Scheduling a Workbench Job
+
+The function `schedule_workbench_job()` schedules a Workbench Job to launch on the Kubernetes cluster at a specific time and/or at regular intervals.
+
+
 
 #### One-time only at a specific time
 
