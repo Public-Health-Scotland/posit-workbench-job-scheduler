@@ -11,21 +11,13 @@
 # cluster.
 ################################################################################
 
-### 00 Required packages ----
+### 00 Launch Workbench Job ----
 
-#install.packages("here")
-
-### 01 Source function script ----
-
-source(file.path(here::here(), "code/launch_workbench_job.R"))
-
-### 02 Launch Workbench Job ----
-
-job_id <- launch_workbench_job(project = here::here(),
+job_id <- launch_workbench_job(job_name = "Test Workbench Job",
+                               project_path = here::here(),
                                script = "code/test_launch_workbench_job_script.R",
-                               ncpus = 0.25,
-                               mem = 128,
-                               job_name = "Test Workbench Job")
+                               n_cpu = 0.25,
+                               n_ram = 128)
 
 Sys.sleep(3)
 
