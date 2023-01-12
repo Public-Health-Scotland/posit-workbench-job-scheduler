@@ -11,17 +11,7 @@
 # cluster.
 ################################################################################
 
-### 00 Required packages ----
-
-#install.packages("here")
-#install.packages("lubridate")
-
-### 01 Source function script ----
-
-source(file.path(here::here(), "code/launch_workbench_job.R"))
-source(file.path(here::here(), "code/schedule_workbench_job.R"))
-
-### 02 Schedule Workbench Job ----
+### 00 Schedule Workbench Job ----
 
 # Schedule a workbench job
 schedule_workbench_job(
@@ -42,10 +32,8 @@ later::later(function() {View(scheduled_workbench_jobs)}, 10)
 # Destroy the private event loop created to schedule the workbench job on a few
 # seconds later
 later::later(function() {
-  later::destroy_loop(schedule_1)
-  rm(schedule_1)  
-},
-20)
+  cancel_workbench_job_schedule("schedule_1")
+  }, 20)
 
 
 

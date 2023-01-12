@@ -63,9 +63,9 @@ schedule_workbench_job <- function(job_name,       # Name to give the Workbench 
   # due - should be a single object of class POSIXct 
   if(inherits(due, "POSIXct")){
     if(is.vector(due) | is.list(due)){
-      cli::cli_abort(
+      cli::cli_abort(c(
         "{.var due} must be of length 1.",
-        "x" = paste0("{.var due} has length ", length(due), "."))
+        "x" = paste0("{.var due} has length ", length(due), ".")))
     }
   } else{
     cli::cli_abort(c(
@@ -77,9 +77,9 @@ schedule_workbench_job <- function(job_name,       # Name to give the Workbench 
   if(!is.null(rpt)){
     if(inherits(rpt, "numeric")){
       if((is.vector(rpt) && length(rpt) > 1) | is.list(rpt)){
-        cli::cli_abort(
+        cli::cli_abort(c(
           "{.var rpt} must be of length 1.",
-          "x" = paste0("{.var rpt} has length ", length(rpt), "."))
+          "x" = paste0("{.var rpt} has length ", length(rpt), ".")))
       }
     } else{
       cli::cli_abort(c(
@@ -132,9 +132,9 @@ schedule_workbench_job <- function(job_name,       # Name to give the Workbench 
   if(!is.null(n_cpu)){
     if(inherits(n_cpu, "numeric")){
       if((is.vector(n_cpu) && length(n_cpu) > 1) | is.list(n_cpu)){
-        cli::cli_abort(
+        cli::cli_abort(c(
           "{.var n_cpu} must be of length 1.",
-          "x" = paste0("{.var n_cpu} has length ", length(n_cpu), "."))
+          "x" = paste0("{.var n_cpu} has length ", length(n_cpu), ".")))
       }
     } else{
       cli::cli_abort(c(
@@ -147,9 +147,9 @@ schedule_workbench_job <- function(job_name,       # Name to give the Workbench 
   if(!is.null(n_ram)){
     if(inherits(n_ram, "numeric")){
       if((is.vector(n_ram) && length(n_ram) > 1) | is.list(n_ram)){
-        cli::cli_abort(
+        cli::cli_abort(c(
           "{.var n_ram} must be of length 1.",
-          "x" = paste0("{.var n_ram} has length ", length(n_ram), "."))
+          "x" = paste0("{.var n_ram} has length ", length(n_ram), ".")))
       }
     } else{
       cli::cli_abort(c(
