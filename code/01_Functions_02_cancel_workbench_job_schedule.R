@@ -11,11 +11,7 @@
 # the function 'schedule_workbench_job()'.
 ################################################################################
 
-### 00 Required packages ----
-
-
-
-### 01 cancel_workbench_job_schedule() ----
+### 00 cancel_workbench_job_schedule() ----
 
 cancel_workbench_job_schedule <- function(schedule_name){ # The name of the schedule (event loop) to cancel
   
@@ -54,6 +50,10 @@ cancel_workbench_job_schedule <- function(schedule_name){ # The name of the sche
   # If the 'schedule_name' event loop's status is 'destroyed', remove the
   # 'schedule_name' object from GlobalEnv
   if(!later::exists_loop(get(schedule_name, envir = .GlobalEnv))) {
+    cli::cli_inform(c(
+      "v" = paste0("The schedule '", schedule_name, "' has successfully been cancelled."),
+      "i" = paste0("No further Workbench Jobs that were scheduled on '", schedule_name, "' will be launched.")
+    ))
     rm(list = as.character(schedule_name), envir = .GlobalEnv)
   } else{
     cli::cli_abort(c(
@@ -62,21 +62,12 @@ cancel_workbench_job_schedule <- function(schedule_name){ # The name of the sche
       "i" = paste0("Ensure that the event loop is destroyed first: {.code later::destroy_loop(", schedule_name, ")}.")))
   }
   
-  # If 'schedule_name' no longer exists as an object in GlobalEnv, remove all
-  # rows in 'scheduled_workbench_jobs' that refer to 'schedule_name'
-  if(!exists(schedule_name, envir = .GlobalEnv)){
-    suppressWarnings(
-      scheduled_workbench_jobs <<- scheduled_workbench_jobs |>
-        dplyr::filter(!grepl(paste0("^", schedule_name, "$"), schedule_name))
-    )
-  } else{
-    cli::cli_abort(c(
-      paste0("Unable to remove rows from the tibble {.var scheduled_workbench_jobs} referring to the object {.var ", schedule_name, "}."),
-      "x" = paste0("The object {.var ", schedule_name, "} still exists.")))
-  }
-  
-  # Inform the user that the schedule has been successfully cancelled
-  cli::cli_inform(c(
-    "v" = paste0("The schedule '", schedule_name, "' has successully been cancelled.")
-  ))
+  # Inform the user of the remaining schedules
+  r <- lapply(ls(envir = .GlobalEnv), function(x){
+    if(class(get(x, envir = .GlobalEnv)) == class(later::global_loop())){
+        cli::cli_inform(c(
+          "i" = paste0("The schedule '", x, "' is still active.")
+        ))
+    }
+  })
 }

@@ -27,27 +27,15 @@ for(i in seq(1, 9)){
   )  
 }
 
-# View the tibble (10 seconds later) containing the details of the scheduled
-# workbench jobs
-later::later(function() {View(scheduled_workbench_jobs)}, 10)
-
-
-# View the tibble (1 minute and 10 seconds later) containing the details of the scheduled
-# workbench jobs
-later::later(function() {View(scheduled_workbench_jobs)}, 70)
-
-
-### 03 Cancel some of the schedules ----
+### 03 Cancel some of the schedules at a later point ----
 
 later::later(function() {
   for(i in seq(3, 5)){
     cancel_workbench_job_schedule(paste0("schedule_", i))
   }
-}, 120)
+}, 10)
 
 
-# View the tibble (10 seconds later) containing the details of the scheduled
-# workbench jobs
-later::later(function() {View(scheduled_workbench_jobs)}, 130)
+
 
 
