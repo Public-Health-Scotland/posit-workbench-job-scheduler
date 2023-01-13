@@ -10,11 +10,7 @@
 # Function to programmatically launch workbench jobs on the Kubernetes cluster.
 ################################################################################
 
-### 00 Required packages ----
-
-#install.packages("rstudioapi")
-
-### 01 launch_workbench_job()  ----
+### 00 launch_workbench_job()  ----
 
 # A function to programmatically launch a workbench job on the Kubernetes
 # cluster
@@ -205,6 +201,13 @@ launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench J
     resourceLimits = job_resource_limits,
     applyConfigSettings = TRUE
   )
+  
+  # Inform the user that the Workbench Job has been launched
+  cli::cli_inform(c(
+    "v" = paste0("A Workbench Job with id '", job_id, "' and name '",
+                 ifelse(is.null(job_name), script_file, job_name), "' has ",
+                 "been launched on the cluster '", launcher_info$clusters[[1]]$name, "'.")
+  ))
   
   return(job_id)
 }
