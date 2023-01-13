@@ -18,25 +18,9 @@ schedule_workbench_job(
   job_name = "job_name_1",
   schedule_name = "schedule_1",
   due = lubridate::now() + lubridate::seconds(10),
-  rpt = as.numeric(lubridate::as.duration("7 days")),
+  rpt = as.numeric(lubridate::as.duration("3 days")),
   project_path = here::here(),
   script = "code/test_launch_workbench_job_script.R",
   n_cpu = 0.25,
   n_ram = 128
 )
-
-# View the tibble (10 seconds later) containing the details of the scheduled
-# workbench jobs
-later::later(function() {View(scheduled_workbench_jobs)}, 10)
-
-# Destroy the private event loop created to schedule the workbench job on a few
-# seconds later
-later::later(function() {
-  cancel_workbench_job_schedule("schedule_1")
-  }, 20)
-
-
-
-
-
-

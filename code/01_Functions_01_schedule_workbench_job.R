@@ -11,15 +11,7 @@
 # Kubernetes cluster.
 ################################################################################
 
-### 00 Required packages ----
-
-#install.packages("rstudioapi")
-#install.packages("later")
-#install.packages("lubridate")
-#install.packages("tibble")
-#install.packages("dplyr")
-
-### 01 schedule_workbench_job()  ----
+### 00 schedule_workbench_job()  ----
 
 # A function to programmatically schedule the launch of a workbench job on the
 # Kubernetes cluster
@@ -176,30 +168,14 @@ schedule_workbench_job <- function(job_name,       # Name to give the Workbench 
     assign(schedule_name, later::create_loop(), envir = .GlobalEnv)
   }
   
-  # Define an empty tibble for recording the status of scheduled jobs, if it
-  # doesn't already exist
-  if(!exists("scheduled_workbench_jobs")){
-    a <- tibble::tibble(
-      job_id = character(0),
-      job_name = character(0),
-      schedule_name = character(0),
-      due = as.POSIXct(character())
-    )
-    
-    assign("scheduled_workbench_jobs", a, envir = .GlobalEnv)
-    
-    rm(a)
-  }
-  
-  # Add the details of the first run of the workbench job to the tibble
-  # 'scheduled_workbench_jobs'
-  scheduled_workbench_jobs <<- dplyr::bind_rows(
-    scheduled_workbench_jobs,
-    tibble::tibble(job_id = "",
-                   job_name = job_name,
-                   schedule_name = schedule_name,
-                   due = due)
-  )
+  # Inform the user that the first run of the workbench job will be launched at
+  # the requested time
+  cli::cli_inform(c(
+    "i" = paste0("The schedule '", schedule_name, "' will submit a Workbench ",
+                 "Job with the name '", job_name, "' to be launched on ",
+                 lubridate::stamp("Friday 31 January 6161", quiet = TRUE)(due),
+                 " at ", lubridate::stamp("23:59:59", quiet = TRUE)(due), ".")
+  ))
   
   # Schedule the first run, and all subsequent runs, of the workbench job
   later::later(
@@ -213,35 +189,20 @@ schedule_workbench_job <- function(job_name,       # Name to give the Workbench 
                                        n_cpu = n_cpu,
                                        n_ram = n_ram)
 
-        # Add the job_id to workbench job to the tibble
-        # 'scheduled_workbench_jobs'
-        a <- job_id
-        b <- job_name
-        c <- schedule_name
-        d <- due
-        scheduled_workbench_jobs <<- within(
-          scheduled_workbench_jobs,
-          job_id[job_name      == b &
-                 schedule_name == c &
-                 due           == d] <- a
-        )
-        rm(list = letters[1:4])
-        
         # Recursively call this function every 'rpt' seconds
         if(!is.null(rpt)) {
           
           # Calculate the date and time when the workbench job should next run
           due <<- due + lubridate::seconds(rpt)
           
-          # Add the details of the next run of the workbench job to the tibble
-          # 'scheduled_workbench_jobs'
-          scheduled_workbench_jobs <<- dplyr::bind_rows(
-            scheduled_workbench_jobs,
-            tibble::tibble(job_id = "",
-                           job_name = job_name,
-                           schedule_name = schedule_name,
-                           due = due)
-          )
+          # Inform the user that the next run of the workbench job will be
+          # launched at the requested time
+          cli::cli_inform(c(
+            "i" = paste0("The schedule '", schedule_name, "' will submit a Workbench ",
+                         "Job with the name '", job_name, "' to be launched on ",
+                         lubridate::stamp("Friday 31 January 6161", quiet = TRUE)(due),
+                         " at ", lubridate::stamp("23:59:59", quiet = TRUE)(due), ".")
+          ))
           
           # Schedule the next run of the workbench job
           later::later(f, rpt)
