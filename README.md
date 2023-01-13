@@ -159,4 +159,28 @@ A specific scheduled Workbench Job cannot be cancelled.  Instead, please refer t
 
 ### Cancelling a schedule
 
-The function `cancel_workbench_job_schedule()` cancels a schedule created by the function `schedule_workbench_job()`.
+The function `cancel_workbench_job_schedule()` cancels a schedule created by the function `schedule_workbench_job()`.  Cancelling a schedule destroys the event loop that runs the schedule, then removes the object from R's Global Environment.
+
+#### Usage
+
+```R
+cancel_workbench_job_schedule(
+  schedule_name
+)
+```
+
+#### Arguments
+
+##### schedule_name
+
+The name (as a string) of the schedule (event loop object) to cancel.
+
+#### Examples
+
+```R
+cancel_workbench_job_schedule("schedule_1")
+
+✔ The schedule 'schedule_1' has successfully been cancelled.
+ℹ No further Workbench Jobs that were scheduled on 'schedule_1' will be launched.
+ℹ The schedule 'schedule_2' is still active.
+```
