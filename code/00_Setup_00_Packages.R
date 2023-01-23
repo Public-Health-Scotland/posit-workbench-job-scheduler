@@ -28,10 +28,3 @@
 # install.packages("renv")
 # renv::init()
 
-### 01 Restore the project's dependencies from the lockfile ----
-
-renv::restore(
-  rebuild = TRUE,
-  repos = c(RSPM = "https://packagemanager.rstudio.com/all/__linux__/centos7/latest"),
-  clean = TRUE,
-  prompt = FALSE)
