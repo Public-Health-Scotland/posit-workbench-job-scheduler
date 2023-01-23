@@ -11,8 +11,11 @@
 
 ### -- Source R scripts ----
 
-# Load the required packages from the 'renv' library
-source(file.path(here::here(), "code", "00_Setup_00_Packages.R"))
+# Restore the project's dependencies from the lockfile
+renv::restore(
+  rebuild = TRUE,
+  clean = TRUE,
+  prompt = FALSE)
 
 # Set R, knitr and project-specific options
 source(file.path(here::here(), "code", "00_Setup_01_Options.R"))
