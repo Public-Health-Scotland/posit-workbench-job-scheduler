@@ -12,7 +12,7 @@
 
 ### 00 Define data file paths ----
 
-basefiles_path <- file.path(here::here(), "data", "basefiles")
-output_path <- file.path(here::here(), "data", "output")
-temp_path <- file.path(here::here(), "data", "temp")
-lookups_path <- file.path(here::here(), "data", "lookups")
+basefiles_path <- here::here("data", "basefiles")
+output_path <- here::here("data", "output")
+temp_path <- here::here("data", "temp")
+lookups_path <- here::here("data", "lookups")
