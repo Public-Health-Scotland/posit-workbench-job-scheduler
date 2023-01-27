@@ -30,16 +30,18 @@ launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench J
   
   ### ---- Check arguments passed to the function                       ---- ###
   
-  # job_name - should be a string (one element character vector)
-  if(!inherits(job_name, "character")){
-    cli::cli_abort(c(
-      "{.var job_name} must be an object of class {.cls {class('character')}}.",
-      "x" = "{.var job_name} is an object of class {.cls {class(job_name)}}."))
-  } else{
-    if (!length(job_name) == 1){
+  # job_name - should be a string (one element character vector) (if not null)
+  if(!is.null(job_name)){
+    if(!inherits(job_name, "character")){
       cli::cli_abort(c(
-        "{.var job_name} must be a {.cls {class('character')}} vector of length 1.",
-        "x" = paste0("{.var job_name} is a {.cls {class(job_name)}} vector of length ", length(job_name), ".")))
+        "{.var job_name} must be an object of class {.cls {class('character')}}.",
+        "x" = "{.var job_name} is an object of class {.cls {class(job_name)}}."))
+    } else{
+      if (!length(job_name) == 1){
+        cli::cli_abort(c(
+          "{.var job_name} must be a {.cls {class('character')}} vector of length 1.",
+          "x" = paste0("{.var job_name} is a {.cls {class(job_name)}} vector of length ", length(job_name), ".")))
+      }
     }
   }
   
