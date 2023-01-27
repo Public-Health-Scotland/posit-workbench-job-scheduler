@@ -15,10 +15,11 @@
 
 # A function to programmatically schedule the launch of a workbench job on the
 # Kubernetes cluster
-schedule_workbench_job <- function(job_name,       # Name to give the Workbench Job
+schedule_workbench_job <- function(
                                    schedule_name,  # The name of the event loop to schedule the Workbench Job on        
                                    due,            # Date / time (as POSIXct) to run the Workbench Job
                                    rpt = NULL,     # Repeat every n seconds thereafter
+                                   job_name,       # Name to give the Workbench Job
                                    project_path,   # Path to project / working directory
                                    script,         # Relative path to R script to execute
                                    n_cpu = NULL,   # Number of CPUs to request
