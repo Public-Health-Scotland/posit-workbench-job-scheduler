@@ -34,13 +34,19 @@ next_weekdaytime <- function(day, time){
 # scheduling test
 job_sched_1hr <- schedule_workbench_job(schedule_name = "sched_test_1hr",
                                       # due = now() + seconds(10),
-                                      due = next_weekdaytime("Wednesday", "13:00:00"),
+                                      due = next_weekdaytime("Wednesday", "16:00:00"),
                                       rpt = (60*60*1),
                                       job_name = "sched_job_1hr",
                                       project_path = here::here(),
                                       script = "job_1hr.R",
                                       n_cpu = 0.5,
                                       n_ram = 1024)
+
+# run this every couple of minutes?!
+while(TRUE){
+  Sys.sleep(120)
+  later::run_now()
+}
 
 # cancel_workbench_job_schedule(schedule_name = "sched_test_1hr")
 
@@ -56,5 +62,11 @@ job_sched_3hr <- schedule_workbench_job(schedule_name = "sched_test_3hr",
                                         script = "job_3hr.R",
                                         n_cpu = 0.5,
                                         n_ram = 1024)
+
+# run this every couple of minutes?!
+while(TRUE){
+  Sys.sleep(120)
+  later::run_now()
+}
 
 # cancel_workbench_job_schedule(schedule_name = "sched_test_3hr")
