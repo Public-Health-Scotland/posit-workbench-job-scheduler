@@ -32,7 +32,7 @@ launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench J
     } else{
       if (!length(job_name) == 1){
         write_stderr("✖ job_name must be a 'character' vector of length 1.\n")
-        stop("job_name is a", class(job_name), " vector of length ", length(job_name), ".")
+        stop("job_name is a ", class(job_name), " vector of length ", length(job_name), ".")
       }
     }
   }
@@ -45,7 +45,7 @@ launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench J
   } else{
     if (!length(project_path) == 1){
       write_stderr("✖ project_path must be a 'character' vector of length 1.\n")
-      stop("project_path is a", class(project_path), " vector of length ", length(project_path), ".")
+      stop("project_path is a ", class(project_path), " vector of length ", length(project_path), ".")
     } else{
       if(!dir.exists(path.expand(project_path))){
         write_stderr("✖ project_path must be a path to an existing directory.\n")
@@ -62,7 +62,7 @@ launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench J
   } else{
     if (!length(script) == 1){
       write_stderr("✖ script must be a 'character' vector of length 1.\n")
-      stop("script is a", class(script), " vector of length ", length(script), ".")
+      stop("script is a ", class(script), " vector of length ", length(script), ".")
     } else{
       if(!file.exists(file.path(path.expand(project_path), script))){
         write_stderr("✖ script must be a path to an existing file, relative to project_path.\n")
