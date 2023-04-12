@@ -41,7 +41,5 @@ source(file.path(here::here(), "code", "01_Functions_03_cancel_workbench_job_sch
 
 ### -- Inform user that the Posit Workbench Job Scheduler is now running ----
 
-cli::cli_inform(c(
-  "v" = "Posit Workbench Job Scheduler is running",
-  "i" = "Please ensure that you do not quit this Posit Workbench session!"
-))
+write_stdout("✔ Posit Workbench Job Scheduler is running\n")
+write_stdout("ℹ Please ensure that you do not quit this Posit Workbench session!\n")
