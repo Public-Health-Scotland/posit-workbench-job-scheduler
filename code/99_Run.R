@@ -23,14 +23,17 @@ source(file.path(here::here(), "code", "00_Setup_01_Options.R"))
 # Define file paths
 source(file.path(here::here(), "code", "00_Setup_02_Paths.R"))
 
+# Define functions to write to stdout and stderr
+source(file.path(here::here(), "code", "01_Functions_00_write_output_to_stdout_or_stderr.R"))
+
 # Define launch_workbench_job()
-source(file.path(here::here(), "code", "01_Functions_00_launch_workbench_job.R"))
+source(file.path(here::here(), "code", "01_Functions_01_launch_workbench_job.R"))
 
 # Define schedule_workbench_job()
-source(file.path(here::here(), "code", "01_Functions_01_schedule_workbench_job.R"))
+source(file.path(here::here(), "code", "01_Functions_02_schedule_workbench_job.R"))
 
 # Define cancel_workbench_job_schedule()
-source(file.path(here::here(), "code", "01_Functions_02_cancel_workbench_job_schedule.R"))
+source(file.path(here::here(), "code", "01_Functions_03_cancel_workbench_job_schedule.R"))
 
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
