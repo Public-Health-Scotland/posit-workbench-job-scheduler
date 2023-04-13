@@ -26,7 +26,7 @@ cancel_workbench_job_schedule <- function(schedule_name){ # The name of the sche
         stop("An object with the name '", schedule_name, "' does not exist in the .GlobalEnv.")
       } else{
         if(class(get(schedule_name, envir = .GlobalEnv)) != class(later::global_loop())){
-          write_stderr("✖ schedule_name must match the name of an object of class ", class(later::global_loop()), "./n")
+          write_stderr("✖ schedule_name must match the name of an object of class 'event_loop'.\n")
           stop("The object '", schedule_name, "' in the Global Environnment is of class ", class(get(schedule_name, envir = .GlobalEnv)), ".")
         }
       }
@@ -41,20 +41,20 @@ cancel_workbench_job_schedule <- function(schedule_name){ # The name of the sche
   # If the 'schedule_name' event loop's status is 'destroyed', remove the
   # 'schedule_name' object from GlobalEnv
   if(!later::exists_loop(get(schedule_name, envir = .GlobalEnv))) {
-    write_stdout("✔ The schedule '", schedule_name, "' has successfully been cancelled.\n")
-    write_stdout("ℹ No further Workbench Jobs that were scheduled on '", schedule_name, "' will be launched.")
+    write_stdout(paste0("✔ The schedule '", schedule_name, "' has successfully been cancelled.\n"))
+    write_stdout(paste0("ℹ No further Workbench Jobs that were scheduled on '", schedule_name, "' will be launched.\n"))
     
     rm(list = as.character(schedule_name), envir = .GlobalEnv)
   } else{
-    write_stderr("✖ The event loop ", schedule_name, " still exists.\n")
-    write_stderr("ℹ Ensure that the event loop is destroyed first: later::destroy_loop(", schedule_name, ").\n")
+    write_stderr(paste0("✖ The event loop ", schedule_name, " still exists.\n"))
+    write_stderr(paste0("ℹ Ensure that the event loop is destroyed first: later::destroy_loop(", schedule_name, ").\n"))
     stop("Unable to remove ", schedule_name, " from .GlobalEnv.")
   }
   
   # Inform the user of the remaining schedules
   r <- lapply(ls(envir = .GlobalEnv), function(x){
     if(class(get(x, envir = .GlobalEnv)) == class(later::global_loop())){
-      write_stdout("ℹ The schedule '", x, "' is still active.\n")
+      write_stdout(paste0("ℹ The schedule '", x, "' is still active.\n"))
     }
   })
 }
