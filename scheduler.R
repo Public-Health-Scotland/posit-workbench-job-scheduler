@@ -34,19 +34,19 @@ next_weekdaytime <- function(day, time){
 # scheduling test
 job_sched_1hr <- schedule_workbench_job(schedule_name = "sched_test_1hr",
                                       # due = now() + seconds(10),
-                                      due = next_weekdaytime("Wednesday", "16:00:00"),
-                                      rpt = (60*60*1),
+                                      due = next_weekdaytime("Tuesday", "09:00:00"),
+                                      rpt = (60*60*0.5),
                                       job_name = "sched_job_1hr",
                                       project_path = here::here(),
                                       script = "job_1hr.R",
-                                      n_cpu = 0.5,
+                                      n_cpu = 1,
                                       n_ram = 1024)
 
 # run this every couple of minutes?!
-while(TRUE){
-  Sys.sleep(120)
-  later::run_now()
-}
+# while(TRUE){
+#   Sys.sleep(120)
+#   later::run_now()
+# }
 
 # cancel_workbench_job_schedule(schedule_name = "sched_test_1hr")
 
@@ -55,18 +55,18 @@ while(TRUE){
 # scheduling test
 job_sched_3hr <- schedule_workbench_job(schedule_name = "sched_test_3hr",
                                         # due = now() + seconds(10),
-                                        due = next_weekdaytime("Wednesday", "13:00:00"),
+                                        due = next_weekdaytime("Thursday", "10:00:00"),
                                         rpt = (60*60*3),
                                         job_name = "sched_job_3hr",
                                         project_path = here::here(),
                                         script = "job_3hr.R",
-                                        n_cpu = 0.5,
+                                        n_cpu = 1,
                                         n_ram = 1024)
 
 # run this every couple of minutes?!
-while(TRUE){
-  Sys.sleep(120)
-  later::run_now()
-}
+# while(TRUE){
+#   Sys.sleep(120)
+#   later::run_now()
+# }
 
 # cancel_workbench_job_schedule(schedule_name = "sched_test_3hr")
