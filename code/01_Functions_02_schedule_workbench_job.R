@@ -29,7 +29,7 @@ schedule_workbench_job <- function(
   } else{
     if (!length(job_name) == 1){
       write_stderr("✖ job_name must be a 'character' vector of length 1.\n")
-      stop("job_name is a", class(job_name), " vector of length ", length(job_name), ".")
+      stop("job_name is a ", class(job_name), " vector of length ", length(job_name), ".")
     }
   }
 
@@ -40,19 +40,19 @@ schedule_workbench_job <- function(
   } else{
     if (!length(schedule_name) == 1){
       write_stderr("✖ schedule_name must be a 'character' vector of length 1.\n")
-      stop("schedule_name is a", class(schedule_name), " vector of length ", length(schedule_name), ".")
+      stop("schedule_name is a ", class(schedule_name), " vector of length ", length(schedule_name), ".")
     }
   }
   
   # due - should be a single object of class POSIXct 
-  if(inherits(due, "POSIXct")){
-    if(is.vector(due) | is.list(due)){
-      write_stderr("✖ due must be of length 1.\n")
-      stop("due has length ", length(due), ".")
-    }
+  if(!length(due) == 1){
+    write_stderr("✖ due must be of length 1.\n")
+    stop("due has length ", length(due), ".")
   } else{
-    write_stderr("✖ due must be an object of class ", class(lubridate::as_datetime(Sys.time())), ".\n")
-    stop("due is an object of class ", class(due), ".")
+      if(!inherits(due, "POSIXct")){
+        write_stderr("✖ due must be an object of class 'POSIXct'.\n")
+        stop("due is an object of class ", class(due), ".")
+      }
   }
 
   # rpt - should be a single object of class numeric (if not null)
@@ -76,7 +76,7 @@ schedule_workbench_job <- function(
   } else{
     if (!length(project_path) == 1){
       write_stderr("✖ project_path must be a 'character' vector of length 1.\n")
-      stop("project_path is a", class(project_path), " vector of length ", length(project_path), ".")
+      stop("project_path is a ", class(project_path), " vector of length ", length(project_path), ".")
     } else{
       if(!dir.exists(path.expand(project_path))){
         write_stderr("✖ project_path must be a path to an existing directory.\n")
@@ -93,7 +93,7 @@ schedule_workbench_job <- function(
   } else{
     if (!length(script) == 1){
       write_stderr("✖ script must be a 'character' vector of length 1.\n")
-      stop("script is a", class(script), " vector of length ", length(script), ".")
+      stop("script is a ", class(script), " vector of length ", length(script), ".")
     } else{
       if(!file.exists(file.path(path.expand(project_path), script))){
         write_stderr("✖ script must be a path to an existing file, relative to project_path.\n")
