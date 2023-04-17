@@ -17,14 +17,6 @@
       "Hash": "e9c08b94391e9f3f97355841229124f2",
       "Requirements": []
     },
-    "cli": {
-      "Package": "cli",
-      "Version": "3.6.0",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "3177a5a16c243adc199ba33117bd9657",
-      "Requirements": []
-    },
     "cpp11": {
       "Package": "cpp11",
       "Version": "0.4.3",
@@ -77,7 +69,7 @@
       "Package": "renv",
       "Version": "0.16.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "CRAN",
       "Hash": "c9e8442ab69bc21c9697ecf856c1e6c7",
       "Requirements": []
     },

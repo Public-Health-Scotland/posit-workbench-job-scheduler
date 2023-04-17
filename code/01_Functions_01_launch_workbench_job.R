@@ -1,9 +1,4 @@
 ################################################################################
-# Name of file:       launch_workbench_job.R
-# Type of script:     R
-#
-# Original author:    Terry McLaughlin
-#
 # Written/run on: R version 4.1.2 (2021-11-01) -- "Bird Hippie"
 # Platform: x86_64-pc-linux-gnu (64-bit)
 #
@@ -24,8 +19,7 @@ launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench J
   ### ---- to support Workbench jobs                                    ---- ###
   
   if(!rstudioapi::launcherAvailable()) {
-    cli::cli_abort(c(
-      "x" = "The Workbench launcher is either unavailable or not configured to support Workbench jobs."))
+    stop("The Workbench launcher is either unavailable or not configured to support Workbench jobs.")
   }
   
   ### ---- Check arguments passed to the function                       ---- ###
@@ -33,14 +27,12 @@ launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench J
   # job_name - should be a string (one element character vector) (if not null)
   if(!is.null(job_name)){
     if(!inherits(job_name, "character")){
-      cli::cli_abort(c(
-        "{.var job_name} must be an object of class {.cls {class('character')}}.",
-        "x" = "{.var job_name} is an object of class {.cls {class(job_name)}}."))
+      write_stderr("✖ job_name must be an object of class 'character'.\n")
+      stop("job_name is an object of class ", class(job_name), ".")
     } else{
       if (!length(job_name) == 1){
-        cli::cli_abort(c(
-          "{.var job_name} must be a {.cls {class('character')}} vector of length 1.",
-          "x" = paste0("{.var job_name} is a {.cls {class(job_name)}} vector of length ", length(job_name), ".")))
+        write_stderr("✖ job_name must be a 'character' vector of length 1.\n")
+        stop("job_name is a ", class(job_name), " vector of length ", length(job_name), ".")
       }
     }
   }
@@ -48,19 +40,16 @@ launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench J
   # project_path - should be a string (one element character vector) containing
   #                the path to an existing directory
   if(!inherits(project_path, "character")){
-    cli::cli_abort(c(
-      "{.var project_path} must be an object of class {.cls {class('character')}}.",
-      "x" = "{.var project_path} is an object of class {.cls {class(project_path)}}."))
+    write_stderr("✖ project_path must be an object of class 'character'.\n")
+    stop("project_path is an object of class ", class(project_path), ".")
   } else{
     if (!length(project_path) == 1){
-      cli::cli_abort(c(
-        "{.var project_path} must be a {.cls {class('character')}} vector of length 1.",
-        "x" = paste0("{.var project_path} is a {.cls {class(project_path)}} vector of length ", length(project_path), ".")))
+      write_stderr("✖ project_path must be a 'character' vector of length 1.\n")
+      stop("project_path is a ", class(project_path), " vector of length ", length(project_path), ".")
     } else{
       if(!dir.exists(path.expand(project_path))){
-        cli::cli_abort(c(
-          "{.var project_path} must be a path to an existing directory.",
-          "x" = paste0("The directory ", project_path, " does not exist.")))
+        write_stderr("✖ project_path must be a path to an existing directory.\n")
+        stop("The directory ", project_path, " does not exist.")
       }
     }
   }
@@ -68,19 +57,16 @@ launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench J
   # script - should be a string (one element character vector) containing the 
   #          path to an existing R script, relative to the project_path
   if(!inherits(script, "character")){
-    cli::cli_abort(c(
-      "{.var script} must be an object of class {.cls {class('character')}}.",
-      "x" = "{.var script} is an object of class {.cls {class(script)}}."))
+    write_stderr("✖ script must be an object of class 'character'.\n")
+    stop("script is an object of class ", class(script), ".")
   } else{
     if (!length(script) == 1){
-      cli::cli_abort(c(
-        "{.var script} must be a {.cls {class('character')}} vector of length 1.",
-        "x" = paste0("{.var script} is a {.cls {class(script)}} vector of length ", length(script), ".")))
+      write_stderr("✖ script must be a 'character' vector of length 1.\n")
+      stop("script is a ", class(script), " vector of length ", length(script), ".")
     } else{
       if(!file.exists(file.path(path.expand(project_path), script))){
-        cli::cli_abort(c(
-          "{.var script} must be a path to an existing file, relative to {.var project_path}",
-          "x" = paste0("The file ", file.path(path.expand(project_path), script), " does not exist.")))
+        write_stderr("✖ script must be a path to an existing file, relative to project_path.\n")
+        stop("The file ", file.path(path.expand(project_path), script), " does not exist.")
       }
     }
   }
@@ -89,14 +75,12 @@ launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench J
   if(!is.null(n_cpu)){
     if(inherits(n_cpu, "numeric")){
       if((is.vector(n_cpu) && length(n_cpu) > 1) | is.list(n_cpu)){
-        cli::cli_abort(c(
-          "{.var n_cpu} must be of length 1.",
-          "x" = paste0("{.var n_cpu} has length ", length(n_cpu), ".")))
+        write_stderr("✖ n_cpu must be of length 1.\n")
+        stop("n_cpu has length ", length(n_cpu), ".")
       }
     } else{
-      cli::cli_abort(c(
-        "{.var n_cpu} must be an object of class {.cls {class(1)}}.",
-        "x" = "{.var n_cpu} is an object of class {.cls {class(n_cpu)}}"))
+      write_stderr("✖ n_cpu must be an object of class numeric.\n")
+      stop("n_cpu is an object of class ", class(n_cpu), ".")
     }
   }
   
@@ -104,14 +88,12 @@ launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench J
   if(!is.null(n_ram)){
     if(inherits(n_ram, "numeric")){
       if((is.vector(n_ram) && length(n_ram) > 1) | is.list(n_ram)){
-        cli::cli_abort(c(
-          "{.var n_ram} must be of length 1.",
-          "x" = paste0("{.var n_ram} has length ", length(n_ram), ".")))
+        write_stderr("✖ n_ram must be of length 1.\n")
+        stop("n_ram has length ", length(n_ram), ".")
       }
     } else{
-      cli::cli_abort(c(
-        "{.var n_ram} must be an object of class {.cls {class(1)}}.",
-        "x" = "{.var n_ram} is an object of class {.cls {class(n_ram)}}"))
+      write_stderr("✖ n_ram must be an object of class numeric.\n")
+      stop("n_ram is an object of class ", class(n_ram), ".")
     }
   }
   
@@ -143,10 +125,9 @@ launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench J
   
   if(!is.null(n_cpu)) {
     if(n_cpu > cpu_count_max_value) {
-      cli::cli_abort(c(
-        "{.var n_cpu} must not exceed maximum permitted.",
-        "x" = paste0("{.var n_cpu} requested (", n_cpu, ") is greater than ",
-                     "maximum permitted (", cpu_count_max_value, ").")))
+      write_stderr("✖ n_cpu must not exceed maximum permitted.\n")
+      stop("n_cpu requested (", n_cpu, ") is greater than ",
+           "maximum permitted (", cpu_count_max_value, ").")
     }
   }
   
@@ -157,10 +138,9 @@ launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench J
   
   if(!is.null(n_ram)) {
     if(n_ram > ram_count_max_value) {
-      cli::cli_abort(c(
-        "{.var n_ram} must not exceed maximum permitted.",
-        "x" = paste0("{.var n_ram} requested (", n_ram, ") is greater than ",
-                     "maximum permitted (", ram_count_max_value, ").")))
+      write_stderr("✖ n_ram must not exceed maximum permitted.\n")
+      stop("n_ram requested (", n_ram, ") is greater than ",
+           "maximum permitted (", ram_count_max_value, ").")
     }
   }
   
@@ -207,11 +187,9 @@ launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench J
   )
   
   # Inform the user that the Workbench Job has been launched
-  cli::cli_inform(c(
-    "v" = paste0("A Workbench Job with id '", job_id, "' and name '",
-                 ifelse(is.null(job_name), script_file, job_name), "' has ",
-                 "been launched on the cluster '", launcher_info$clusters[[1]]$name, "'.")
-  ))
+  write_stdout(paste0("✔ A Workbench Job with id '", job_id, "' and name '",
+                      ifelse(is.null(job_name), script_file, job_name), "' has ",
+                      "been launched on the cluster '", launcher_info$clusters[[1]]$name, "'.\n"))
   
   return(job_id)
 }
