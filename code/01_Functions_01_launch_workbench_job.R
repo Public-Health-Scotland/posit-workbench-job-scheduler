@@ -13,8 +13,9 @@ launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench J
                                  project_path,    # Path to project / working directory
                                  script,          # Relative path to R script to execute
                                  n_cpu = NULL,    # Number of CPUs to request
-                                 n_ram = NULL) {  # Amount of memory (MB) to request
-
+                                 n_ram = NULL,    # Amount of memory (MB) to request
+                                 trailing_args = NULL) {   # Arguments to pass to R script
+  
   ### ---- Check if the Workbench launcher is available and configured  ---- ###
   ### ---- to support Workbench jobs                                    ---- ###
   
@@ -104,11 +105,22 @@ launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench J
   
   # Define the project's path (i.e. the working directory)
   project_path <- path.expand(project_path)
-
+  
   # Define the R script to execute
   script_path <- path.expand(file.path(project_path, script))
   script_file <- basename(script_path)
   script_arg <- paste("-f", script_path)
+  
+  # Add on any trailing arguments to be passed to the script
+  if(!is.null(trailing_args)){
+    if(inherits(trailing_args, "character")){
+      trailing_args <- paste(c("--args", as.character(trailing_args)), collapse = " ")
+    }
+    else{
+      write_stderr("✖ trailing_args must be an object of class character\n")
+      stop("trailing_args is an object of class ", class(trailing_args), ".")
+    }
+  }
   
   # Define a tag for the job
   job_tag <- paste("rstudio-r-script-job", script_file, sep = ":")
@@ -177,11 +189,14 @@ launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench J
     cluster = launcher_info$clusters[[1]]$name,
     tags = c(job_tag),
     command = "R",
-    args = c("--slave", "--no-save", "--no-restore", script_arg),
+    args = c("--slave", "--no-save", "--no-restore", script_arg, trailing_args),
     workingDirectory = project_path,
     # container = rstudioapi::launcherContainer(image = launcher_info$clusters[[1]]$defaultImage),
-    environment = c("HOME" = Sys.getenv("HOME"), 
-                    "USER" = Sys.getenv("USER")),
+    environment = c("HOME" = Sys.getenv("HOME"),
+                    "USER" = Sys.getenv("USER"),
+                    "http_proxy" = Sys.getenv("http_proxy"),
+                    "https_proxy" = Sys.getenv("https_proxy")
+    ),
     resourceLimits = job_resource_limits,
     applyConfigSettings = TRUE
   )
