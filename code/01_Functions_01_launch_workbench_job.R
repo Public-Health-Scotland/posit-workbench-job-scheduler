@@ -191,7 +191,7 @@ launch_workbench_job <- function(job_name = NULL, # Name to give the Workbench J
     command = "R",
     args = c("--slave", "--no-save", "--no-restore", script_arg, trailing_args),
     workingDirectory = project_path,
-    # container = rstudioapi::launcherContainer(image = launcher_info$clusters[[1]]$defaultImage),
+    container = rstudioapi::launcherContainer(image = launcher_info$clusters[[1]]$defaultImage),
     environment = c("HOME" = Sys.getenv("HOME"),
                     "USER" = Sys.getenv("USER"),
                     "http_proxy" = Sys.getenv("http_proxy"),
